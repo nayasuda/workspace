@@ -27,7 +27,7 @@ const deleteFilesByExtension = (dir, ext) => {
 };
 
 const main = async () => {
-  const name = 'workspace-mcp-server';
+  const name = 'google-workspace-extension';
   const extension = 'tar.gz';
 
   const rootDir = path.join(__dirname, '..');
@@ -35,7 +35,7 @@ const main = async () => {
   fs.rmSync(releaseDir, { recursive: true, force: true });
   const archiveName = `${name}.${extension}`;
   const archiveDir = path.join(releaseDir, name);
-  const workspaceMcpServerDir = path.join(rootDir, 'workspace-mcp-server');
+  const workspaceMcpServerDir = path.join(rootDir, 'workspace-server');
 
   // Create the release directory
   fs.mkdirSync(releaseDir, { recursive: true });
@@ -59,6 +59,21 @@ const main = async () => {
   fs.rmSync(path.join(distDir, 'services'), { recursive: true, force: true });
   fs.rmSync(path.join(distDir, 'utils'), { recursive: true, force: true });
 
+  // Copy native modules and dependencies (keytar, jsdom)
+  const nodeModulesDir = path.join(archiveDir, 'node_modules');
+  fs.mkdirSync(nodeModulesDir, { recursive: true });
+  
+  const { getTransitiveDependencies } = require('./utils/dependencies');
+  const visited = getTransitiveDependencies(rootDir, ['keytar', 'jsdom']);
+
+  visited.forEach(pkg => {
+    const source = path.join(rootDir, 'node_modules', pkg);
+    const dest = path.join(nodeModulesDir, pkg);
+    if (fs.existsSync(source)) {
+      fs.cpSync(source, dest, { recursive: true });
+    }
+  });
+
   const version = process.env.GITHUB_REF_NAME || '0.0.1';
 
   // Generate the gemini-extension.json file
@@ -66,11 +81,11 @@ const main = async () => {
     name: 'google-workspace',
     version,
     contextFileName: 'WORKSPACE-Context.md',
-    cwd: '${extensionPath}',
     mcpServers: {
       'google-workspace': {
         command: 'node',
         args: ['dist/index.js'],
+        cwd: '${extensionPath}',
       },
     },
   };
@@ -84,6 +99,12 @@ const main = async () => {
     path.join(workspaceMcpServerDir, 'WORKSPACE-Context.md'),
     path.join(archiveDir, 'WORKSPACE-Context.md')
   );
+
+  // Copy the commands directory
+  const commandsDir = path.join(rootDir, 'commands');
+  if (fs.existsSync(commandsDir)) {
+    fs.cpSync(commandsDir, path.join(archiveDir, 'commands'), { recursive: true });
+  }
 
 
   // Create the archive
