@@ -68,7 +68,7 @@ const main = () => {
   }
 
   updateJsonFile(workspaceServerPackageJsonPath, version);
-  // Removed updateTsFile(workspaceServerIndexPath, version); as version is now dynamically imported.
+
 };
 
 main();
