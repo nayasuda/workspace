@@ -26,7 +26,7 @@ export class TasksService {
 
     return {
         content: [{
-            type: "text",
+            type: "text" as const,
             text: JSON.stringify(response.data.items || [], null, 2)
         }]
     };
@@ -61,7 +61,7 @@ export class TasksService {
 
     return {
         content: [{
-            type: "text",
+            type: "text" as const,
             text: JSON.stringify(response.data.items || [], null, 2)
         }]
     };
@@ -90,7 +90,7 @@ export class TasksService {
 
     return {
         content: [{
-            type: "text",
+            type: "text" as const,
             text: JSON.stringify(response.data, null, 2)
         }]
     };
@@ -128,7 +128,7 @@ export class TasksService {
 
     return {
         content: [{
-            type: "text",
+            type: "text" as const,
             text: JSON.stringify(response.data, null, 2)
         }]
     };
@@ -157,7 +157,7 @@ export class TasksService {
 
     return {
         content: [{
-            type: "text",
+            type: "text" as const,
             text: `Task ${params.taskId} deleted successfully from list ${params.taskListId}.`
         }]
     };
