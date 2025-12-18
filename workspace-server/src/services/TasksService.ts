@@ -79,8 +79,8 @@ export class TasksService {
     const tasks = await this.authManager.getTasksClient();
     const requestBody: tasks_v1.Schema$Task = {
       title: params.title,
-      notes: params.notes,
-      due: params.due,
+      ...(params.notes !== undefined && { notes: params.notes }),
+      ...(params.due !== undefined && { due: params.due }),
     };
 
     const response = await tasks.tasks.insert({
