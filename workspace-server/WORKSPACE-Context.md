@@ -135,6 +135,31 @@ When asked about "next meeting" or "today's schedule":
 2. **Download**: Use `gmail.downloadAttachment` with the specific `messageId` and `attachmentId`.
 3. **Absolute Paths**: Always provide an **absolute path** for the `localPath` argument (e.g., `/Users/username/Downloads/file.pdf`). Relative paths will be rejected for security.
 
+## 💬 Chat Guidelines
+
+Google Chat uses a specific subset of Markdown. Ensure messages sent to Chat use
+the syntax supported by Chat, and convert any unsupported syntax to a supported
+syntax.
+
+### Supported Formatting
+
+- *bold* (single asterisks)
+- _italic_ (single underscores)
+- ~strikethrough~
+- `inline code`
+- ```code blocks```
+- Bulleted lists ("* " or "- " at line start)
+- Links: <url|text>
+- User mentions: <users/{user}>
+
+### Unsupported (convert these)
+
+- **double asterisks** for bold (convert to *single asterisks*)
+- [text](url) markdown links (convert to <url|text>)
+- Nested lists (flatten with dashes: "- parent", "- -- child")
+- # headings (convert to *bold* text)
+- > blockquotes (preserve the `>` characters, do not remove them)
+
 ## 📄 Docs, Sheets, and Slides
 
 ### Format Selection (Sheets)
