@@ -78,6 +78,14 @@ async function main() {
     });
 
     // 3. Register tools directly on the server
+    // Wrap registerTool to normalise tool names (dots to underscores) for Cursor compatibility
+    const originalRegisterTool = server.registerTool;
+    server.registerTool = function(...args: Parameters<typeof originalRegisterTool>) {
+        const [name, ...rest] = args;
+        const normalizedName = name.replace(/\./g, '_');
+        return originalRegisterTool.apply(server, [normalizedName, ...rest]);
+    };
+
     server.registerTool(
         "auth.clear",
         {

@@ -119,6 +119,10 @@ gemini --debug
 - Consult [GEMINI.md](https://github.com/gemini-cli-extensions/workspace/blob/main/GEMINI.md) (typically found in the project root) for specific instructions related to AI-assisted development, including conventions for comments, and Git usage.
 - **Imports:** Pay special attention to import paths. The project uses ESLint to enforce restrictions on relative imports between packages.
 
+### Tool Naming
+
+Tool names in source use dot notation (e.g., `docs.create`) for logical grouping. These are automatically normalised to underscores at runtime for broader MCP client compatibility (e.g., Cursor IDE).
+
 ### Project Structure
 
 - `workspace-server/`: The main workspace for the MCP server.
