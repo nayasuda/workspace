@@ -35,7 +35,7 @@ function testSeparator(useDotNames: boolean) {
         return (originalRegisterTool as any).apply(server, [normalizedName, ...rest]);
     };
 
-    server.registerTool("test.tool", { inputSchema: z.object({}) }, async () => {});
+    server.registerTool("test.tool", { inputSchema: z.object({}) }, async () => ({ content: [] }));
 }
 
 try {
