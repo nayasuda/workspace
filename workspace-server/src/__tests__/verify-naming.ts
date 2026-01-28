@@ -16,7 +16,7 @@ function testSeparator(useDotNames: boolean) {
     
     // Mock McpServer
     const server = {
-        registerTool: (name: string, schema: any, handler: any) => {
+        registerTool: (name: string, _schema: any, _handler: any) => {
             console.log(`Registered tool: "${name}"`);
             if (useDotNames && !name.includes('.')) {
                 throw new Error(`Expected name to contain "." but got "${name}"`);

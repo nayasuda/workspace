@@ -54,7 +54,7 @@ This will run tests located in the `workspace-server/src/__tests__` directory. E
 
 To test a single file, you can pass its path from the project root as an argument. For example:
 
-```bash
+````bash
 npm run test -- workspace-server/src/__tests__/GmailService.test.ts
 
 ### Linting and Style Checks
@@ -63,7 +63,7 @@ To ensure code quality and formatting consistency, run the linter and tests:
 
 ```bash
 npm run test && npm run lint
-```
+````
 
 This command will run ESLint, Prettier, all tests, and other checks as defined in the project's `package.json`.
 
@@ -121,7 +121,9 @@ gemini --debug
 
 ### Tool Naming
 
-Tool names in source use dot notation (e.g., `docs.create`) for logical grouping. These are automatically normalised to underscores at runtime for broader MCP client compatibility (e.g., Cursor IDE).
+Tool names in source use dot notation (e.g., `docs.create`) for logical grouping. By default, these are normalized to underscores at runtime (e.g., `docs_create`) for compatibility with a broader set of applications that use MCP including Google Antigravity.
+
+When the server is run as a Gemini CLI extension the `--use-dot-names` flag is used to maintain dot notation and avoid breaking existing configurations.
 
 ### Project Structure
 
