@@ -62,7 +62,7 @@ npm run test -- workspace-server/src/__tests__/GmailService.test.ts
 
 To ensure code quality and formatting consistency, run the linter and tests:
 
-```bash
+````bash
 npm run test && npm run lint
 ``
 
@@ -89,7 +89,7 @@ To separately format the code in this project by running the following command f
 
 ```bash
 npm run format
-```
+````
 
 This command uses Prettier to format the code according to the project's style guidelines.
 
