@@ -23,6 +23,7 @@ import { GMAIL_SEARCH_MAX_RESULTS } from "./utils/constants";
 import { extractDocId } from "./utils/IdUtils";
 
 import { setLoggingEnabled } from "./utils/logger";
+import { applyToolNameNormalization } from "./utils/tool-normalization";
 
 // Shared schemas for Gmail tools
 const emailComposeSchema = {
@@ -86,6 +87,11 @@ async function main() {
 
     
     // 3. Register tools directly on the server
+    // Handle tool name normalization (dots to underscores) by default, or use dots if --use-dot-names is passed.
+    const useDotNames = process.argv.includes('--use-dot-names');
+    const separator = useDotNames ? '.' : '_';
+    applyToolNameNormalization(server, useDotNames);
+
     server.registerTool(
         "auth.clear",
         {
@@ -749,7 +755,7 @@ There are a list of system labels that can be modified on a message:
     const transport = new StdioServerTransport();
     await server.connect(transport);
     
-    console.error("Google Workspace MCP Server is running (registerTool). Listening for requests...");
+    console.error(`Google Workspace MCP Server is running (using ${separator} for tool names). Listening for requests...`);
 }
 
 main().catch(error => {
