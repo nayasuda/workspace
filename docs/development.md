@@ -1,18 +1,23 @@
 # Development
 
-This document provides instructions for developing the Google Workspace extension.
+This document provides instructions for developing the Google Workspace
+extension.
 
 ## Development Setup and Workflow
 
-This section guides contributors on how to build, modify, and understand the development setup of this project.
+This section guides contributors on how to build, modify, and understand the
+development setup of this project.
 
 ### Setting Up the Development Environment
 
 **Prerequisites:**
 
 1.  **Node.js**:
-    - **Development:** Please use Node.js `~20.19.0`. This specific version is required due to an upstream development dependency issue. You can use a tool like [nvm](https://github.com/nvm-sh/nvm) to manage Node.js versions.
-    - **Production:** For running the CLI in a production environment, any version of Node.js `>=20` is acceptable.
+    - **Development:** Please use Node.js `~20.19.0`. This specific version is
+      required due to an upstream development dependency issue. You can use a
+      tool like [nvm](https://github.com/nvm-sh/nvm) to manage Node.js versions.
+    - **Production:** For running the CLI in a production environment, any
+      version of Node.js `>=20` is acceptable.
 2.  **Git**
 
 ### Build Process
@@ -36,7 +41,9 @@ To build the entire project (all packages):
 npm run build
 ```
 
-This command typically compiles TypeScript to JavaScript, bundles assets, and prepares the packages for execution. Refer to `scripts/build.js` and `package.json` scripts for more details on what happens during the build.
+This command typically compiles TypeScript to JavaScript, bundles assets, and
+prepares the packages for execution. Refer to `scripts/build.js` and
+`package.json` scripts for more details on what happens during the build.
 
 ### Running Tests
 
@@ -50,11 +57,14 @@ To execute the unit test suite for the project:
 npm run test
 ```
 
-This will run tests located in the `workspace-server/src/__tests__` directory. Ensure tests pass before submitting any changes. For a more comprehensive check, it is recommended to run `npm run test && npm run lint`.
+This will run tests located in the `workspace-server/src/__tests__` directory.
+Ensure tests pass before submitting any changes. For a more comprehensive check,
+it is recommended to run `npm run test && npm run lint`.
 
-To test a single file, you can pass its path from the project root as an argument. For example:
+To test a single file, you can pass its path from the project root as an
+argument. For example:
 
-```bash
+````bash
 npm run test -- workspace-server/src/__tests__/GmailService.test.ts
 
 ### Linting and Style Checks
@@ -63,12 +73,13 @@ To ensure code quality and formatting consistency, run the linter and tests:
 
 ```bash
 npm run test && npm run lint
-```
+````
 
-This command will run ESLint, Prettier, all tests, and other checks as defined in the project's `package.json`.
+This command will run ESLint, Prettier, all tests, and other checks as defined
+in the project's `package.json`.
 
-> [!TIP]
-> After cloning create a git pre-commit hook file to ensure your commits are always clean.
+> [!TIP] After cloning create a git pre-commit hook file to ensure your commits
+> are always clean.
 >
 > ```bash
 > cat <<'EOF' > .git/hooks/pre-commit
@@ -84,17 +95,20 @@ This command will run ESLint, Prettier, all tests, and other checks as defined i
 
 #### Formatting
 
-To separately format the code in this project by running the following command from the root directory:
+To separately format the code in this project by running the following command
+from the root directory:
 
 ```bash
 npm run format
 ```
 
-This command uses Prettier to format the code according to the project's style guidelines.
+This command uses Prettier to format the code according to the project's style
+guidelines.
 
 #### Linting
 
-To separately lint the code in this project, run the following command from the root directory:
+To separately lint the code in this project, run the following command from the
+root directory:
 
 ```bash
 npm run lint
@@ -115,9 +129,14 @@ gemini --debug
 
 ### Coding Conventions
 
-- Please adhere to the coding style, patterns, and conventions used throughout the existing codebase.
-- Consult [GEMINI.md](https://github.com/gemini-cli-extensions/workspace/blob/main/GEMINI.md) (typically found in the project root) for specific instructions related to AI-assisted development, including conventions for comments, and Git usage.
-- **Imports:** Pay special attention to import paths. The project uses ESLint to enforce restrictions on relative imports between packages.
+- Please adhere to the coding style, patterns, and conventions used throughout
+  the existing codebase.
+- Consult
+  [GEMINI.md](https://github.com/gemini-cli-extensions/workspace/blob/main/GEMINI.md)
+  (typically found in the project root) for specific instructions related to
+  AI-assisted development, including conventions for comments, and Git usage.
+- **Imports:** Pay special attention to import paths. The project uses ESLint to
+  enforce restrictions on relative imports between packages.
 
 ### Project Structure
 
@@ -132,7 +151,9 @@ gemini --debug
 
 ## Authentication
 
-The extension uses OAuth 2.0 to authenticate with Google Workspace APIs. The `scripts/auth-utils.js` script provides a command-line interface to manage authentication credentials.
+The extension uses OAuth 2.0 to authenticate with Google Workspace APIs. The
+`scripts/auth-utils.js` script provides a command-line interface to manage
+authentication credentials.
 
 ### Usage
 
