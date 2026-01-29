@@ -54,8 +54,9 @@ This will run tests located in the `workspace-server/src/__tests__` directory. E
 
 To test a single file, you can pass its path from the project root as an argument. For example:
 
-````bash
+```bash
 npm run test -- workspace-server/src/__tests__/GmailService.test.ts
+```
 
 ### Linting and Style Checks
 
@@ -63,7 +64,7 @@ To ensure code quality and formatting consistency, run the linter and tests:
 
 ```bash
 npm run test && npm run lint
-````
+``
 
 This command will run ESLint, Prettier, all tests, and other checks as defined in the project's `package.json`.
 
