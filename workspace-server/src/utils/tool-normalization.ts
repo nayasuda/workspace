@@ -4,17 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
 /**
  * Wraps the McpServer.registerTool method to normalize tool names.
  * If useDotNames is true, dots in tool names are preserved.
  * If useDotNames is false (default), dots are replaced with underscores.
- * 
+ *
  * @param server The McpServer instance to modify.
  * @param useDotNames Whether to preserve dot notation in tool names.
  */
-export function applyToolNameNormalization(server: McpServer, useDotNames: boolean): void {
+export function applyToolNameNormalization(
+  server: McpServer,
+  useDotNames: boolean,
+): void {
   const separator = useDotNames ? '.' : '_';
   const originalRegisterTool = server.registerTool.bind(server);
 
@@ -25,6 +28,9 @@ export function applyToolNameNormalization(server: McpServer, useDotNames: boole
   (server as any).registerTool = (name: string, ...rest: unknown[]) => {
     const normalizedName = name.replace(/\./g, separator);
     // Cast originalRegisterTool to accept spread arguments
-    return (originalRegisterTool as (...args: unknown[]) => unknown)(normalizedName, ...rest);
+    return (originalRegisterTool as (...args: unknown[]) => unknown)(
+      normalizedName,
+      ...rest,
+    );
   };
 }

@@ -15,9 +15,17 @@ describe('Tool Name Normalization', () => {
     const server = { registerTool: mockRegisterTool } as unknown as McpServer;
 
     applyToolNameNormalization(server, false);
-    server.registerTool('test.tool', { inputSchema: z.object({}) }, async () => ({ content: [] }));
+    server.registerTool(
+      'test.tool',
+      { inputSchema: z.object({}) },
+      async () => ({ content: [] }),
+    );
 
-    expect(mockRegisterTool).toHaveBeenCalledWith('test_tool', expect.any(Object), expect.any(Function));
+    expect(mockRegisterTool).toHaveBeenCalledWith(
+      'test_tool',
+      expect.any(Object),
+      expect.any(Function),
+    );
   });
 
   it('should preserve dots when useDotNames is true', () => {
@@ -25,8 +33,16 @@ describe('Tool Name Normalization', () => {
     const server = { registerTool: mockRegisterTool } as unknown as McpServer;
 
     applyToolNameNormalization(server, true);
-    server.registerTool('test.tool', { inputSchema: z.object({}) }, async () => ({ content: [] }));
+    server.registerTool(
+      'test.tool',
+      { inputSchema: z.object({}) },
+      async () => ({ content: [] }),
+    );
 
-    expect(mockRegisterTool).toHaveBeenCalledWith('test.tool', expect.any(Object), expect.any(Function));
+    expect(mockRegisterTool).toHaveBeenCalledWith(
+      'test.tool',
+      expect.any(Object),
+      expect.any(Function),
+    );
   });
 });
