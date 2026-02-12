@@ -29,14 +29,10 @@ export class DocsService {
    * so that nested (child) tabs are included alongside top-level ones.
    */
   private _flattenTabs(tabs: docs_v1.Schema$Tab[]): docs_v1.Schema$Tab[] {
-    const result: docs_v1.Schema$Tab[] = [];
-    for (const tab of tabs) {
-      result.push(tab);
-      if (tab.childTabs && tab.childTabs.length > 0) {
-        result.push(...this._flattenTabs(tab.childTabs));
-      }
-    }
-    return result;
+    return tabs.flatMap((tab) => {
+      const children = tab.childTabs ? this._flattenTabs(tab.childTabs) : [];
+      return [tab, ...children];
+    });
   }
 
   constructor(
