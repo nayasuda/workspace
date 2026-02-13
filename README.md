@@ -38,6 +38,22 @@ Workspace apps. Here are a few examples:
 
 > "Find the file named 'my-file.txt' in my Google Drive."
 
+## Usage on WSL (Windows Subsystem for Linux)
+
+This fork includes specific support for WSL environments. The authentication process will attempt to launch your default Windows browser using `wslview` or `cmd.exe`.
+
+**Requirements:**
+- Ensure `wslu` is installed: `sudo apt install wslu`
+
+**Manual Authentication Mode:**
+If the browser launch fails or if you prefer to copy-paste the URL manually, you can set the `WORKSPACE_OAUTH_MANUAL` environment variable:
+
+```bash
+export WORKSPACE_OAUTH_MANUAL=1
+```
+
+When this variable is set, the extension will print the authentication URL to the console instead of attempting to open a browser.
+
 ## Commands
 
 This extension provides a variety of commands. Here are a few examples:
