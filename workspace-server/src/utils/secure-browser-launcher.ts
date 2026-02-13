@@ -7,6 +7,7 @@
 import { execFile, ExecFileOptions } from 'node:child_process';
 import { platform } from 'node:os';
 import { URL } from 'node:url';
+import * as fs from 'node:fs';
 
 function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   let timeoutId: NodeJS.Timeout;
@@ -16,6 +17,21 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   return Promise.race([promise, timeout]).finally(() =>
     clearTimeout(timeoutId),
   );
+}
+
+/**
+ * Checks if the current environment is WSL (Windows Subsystem for Linux).
+ */
+function isWsl(): boolean {
+  if (process.platform !== 'linux') {
+    return false;
+  }
+  try {
+    const version = fs.readFileSync('/proc/version', 'utf8').toLowerCase();
+    return version.includes('microsoft') || version.includes('wsl');
+  } catch {
+    return false;
+  }
 }
 
 /**
@@ -94,9 +110,15 @@ export async function openBrowserSecurely(
     case 'freebsd':
     case 'openbsd':
       // Linux and BSD variants
-      // Try xdg-open first, fall back to other options
-      command = 'xdg-open';
-      args = [url];
+      if (isWsl()) {
+        // WSL: Try wslview first, then cmd.exe
+        command = 'wslview';
+        args = [url];
+      } else {
+        // Standard Linux: Try xdg-open first
+        command = 'xdg-open';
+        args = [url];
+      }
       break;
 
     default:
@@ -151,20 +173,36 @@ export async function openBrowserSecurely(
   try {
     await withTimeout(tryCommand(command, args), 5000);
   } catch (error) {
-    // For Linux, try fallback commands if xdg-open fails
+    // For Linux (including WSL), try fallback commands if primary command fails
     if (
-      (platformName === 'linux' ||
-        platformName === 'freebsd' ||
-        platformName === 'openbsd') &&
-      command === 'xdg-open'
+      platformName === 'linux' ||
+      platformName === 'freebsd' ||
+      platformName === 'openbsd'
     ) {
-      const fallbackCommands = [
-        'gnome-open',
-        'kde-open',
-        'firefox',
-        'chromium',
-        'google-chrome',
-      ];
+      const fallbackCommands: string[] = [];
+
+      if (isWsl()) {
+        // WSL fallback: cmd.exe /c start <url>
+        // We use a different approach for cmd.exe as it needs special args
+        try {
+            // Note: cmd.exe /c start needs the URL as a separate argument.
+            // We use 'cmd.exe' as the command and ['/c', 'start', url] as args.
+            // This is safer than constructing a shell string.
+            await withTimeout(tryCommand('cmd.exe', ['/c', 'start', url]), 5000);
+            return;
+        } catch {
+            // Fallback failed, continue to throw
+        }
+      } else {
+          // Standard Linux fallbacks
+          fallbackCommands.push(
+            'gnome-open',
+            'kde-open',
+            'firefox',
+            'chromium',
+            'google-chrome',
+          );
+      }
 
       for (const fallbackCommand of fallbackCommands) {
         try {
@@ -193,6 +231,11 @@ export async function openBrowserSecurely(
  * @returns True if the tool should attempt to launch a browser
  */
 export function shouldLaunchBrowser(): boolean {
+  // Always try to launch browser on WSL, as it calls Windows browser
+  if (isWsl()) {
+    return true;
+  }
+
   // A list of browser names that indicate we should not attempt to open a
   // web browser for the user.
   const browserBlocklist = ['www-browser'];

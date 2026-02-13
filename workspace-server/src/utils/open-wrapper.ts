@@ -34,6 +34,14 @@ const createMockChildProcess = () => ({
 });
 
 const openWrapper = async (url: string): Promise<any> => {
+  // Check if manual mode is enabled via environment variable
+  if (process.env.WORKSPACE_OAUTH_MANUAL) {
+    console.log(
+      `Manual auth mode enabled (WORKSPACE_OAUTH_MANUAL). Please open this URL in your browser: ${url}`,
+    );
+    return createMockChildProcess();
+  }
+
   // Check if we should launch the browser
   if (!shouldLaunchBrowser()) {
     console.log(
