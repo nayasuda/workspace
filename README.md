@@ -1,126 +1,104 @@
-# Google Workspace Extension for Gemini CLI
+# Google Workspace Extension for Gemini CLI (WSL-Ready Fork)
 
 [日本語版 / Japanese README](./README.ja.md)
 
 > This repository is an **unofficial fork** of [gemini-cli-extensions/workspace](https://github.com/gemini-cli-extensions/workspace), focused on improving usability in WSL environments.
 
-[![Build Status](https://github.com/gemini-cli-extensions/workspace/actions/workflows/ci.yml/badge.svg)](https://github.com/gemini-cli-extensions/workspace/actions/workflows/ci.yml)
+The Google Workspace extension for Gemini CLI brings the power of Google Workspace apps to your command line. Manage documents, spreadsheets, presentations, emails, chat, and calendar events without leaving your terminal.
 
-The Google Workspace extension for Gemini CLI brings the power of your Google
-Workspace apps to your command line. Manage your documents, spreadsheets,
-presentations, emails, chat, and calendar events without leaving your terminal.
+## Why this fork exists
+
+This fork adds practical improvements for WSL authentication flow, especially around browser launch behavior during OAuth.
+
+## What is changed
+
+- WSL-aware browser launch fallback
+  - `wslview` first
+  - fallback to `cmd.exe /c start`
+- Optional manual authentication mode
+  - `WORKSPACE_OAUTH_MANUAL=1` prints auth URL for copy/paste
+- Minor reliability improvements for WSL authentication flow
 
 ## Prerequisites
 
-Before using the Google Workspace extension, you need to be logged into your
-Google account.
+Before using the extension, you need to be logged into your Google account.
 
 ## Installation
 
-Install the Google Workspace extension by running the following command from
-your terminal:
-
-```bash
-gemini extensions install https://github.com/gemini-cli-extensions/workspace
-```
+`gemini extensions install https://github.com/nayasuda/gemini-workspace-wsl`
 
 ## Recommended for team usage
 
-For stability and reproducibility, use a **fixed release tag** (for example: `v0.0.5-wsl1`) instead of tracking `main`.
+Use a **fixed release tag** instead of tracking `main` for stability and reproducibility.
 
-## Usage
+Example tag:
+- `v0.0.5-wsl1`
 
-Once the extension is installed, you can use it to interact with your Google
-Workspace apps. Here are a few examples:
+## Usage on WSL
 
-**Create a new Google Doc:**
+This fork includes WSL-specific support. During authentication, it attempts to launch your Windows browser via:
 
-> "Create a new Google Doc with the title 'My New Doc' and the content '# My New
-> Document\n\nThis is a new document created from the command line.'"
+1. `wslview`
+2. `cmd.exe` fallback
 
-**List your upcoming calendar events:**
+### Requirements
 
-> "What's on my calendar for today?"
+Install `wslu`:
 
-**Search for a file in Google Drive:**
+```bash
+sudo apt install wslu
+```
 
-> "Find the file named 'my-file.txt' in my Google Drive."
+### Manual Authentication Mode
 
-## Usage on WSL (Windows Subsystem for Linux)
-
-This fork includes specific support for WSL environments. The authentication process will attempt to launch your default Windows browser using `wslview` or `cmd.exe`.
-
-**Requirements:**
-- Ensure `wslu` is installed: `sudo apt install wslu`
-
-**Manual Authentication Mode:**
-If the browser launch fails or if you prefer to copy-paste the URL manually, you can set the `WORKSPACE_OAUTH_MANUAL` environment variable:
+If browser launch fails, or if you prefer copy/paste auth:
 
 ```bash
 export WORKSPACE_OAUTH_MANUAL=1
 ```
 
-When this variable is set, the extension will print the authentication URL to the console instead of attempting to open a browser.
+When enabled, the extension prints the authentication URL to the console instead of launching a browser.
 
 ## Commands
 
-This extension provides a variety of commands. Here are a few examples:
+Examples:
 
 ### Get Schedule
-
-**Command:** `/calendar:get-schedule [date]`
-
+Command: `/calendar:get-schedule [date]`  
 Shows your schedule for today or a specified date.
 
 ### Search Drive
-
-**Command:** `/drive:search <query>`
-
-Searches your Google Drive for files matching the given query.
+Command: `/drive:search <query>`  
+Searches your Google Drive for files matching the query.
 
 ## Deployment
 
-If you want to host your own version of this extension's infrastructure, see the
-[GCP Recreation Guide](docs/GCP-RECREATION.md).
+If you want to host your own infrastructure, see the [GCP Recreation Guide](./docs/GCP-RECREATION.md).
 
 ## Resources
 
-- [Documentation](docs/index.md): Detailed documentation on all the available
-  tools.
-- [GitHub Issues](https://github.com/gemini-cli-extensions/workspace/issues):
-  Report bugs or request features.
+- [Documentation](./docs/index.md): Detailed docs for available tools
+- [GitHub Issues](https://github.com/nayasuda/gemini-workspace-wsl/issues): Bugs and feature requests
 
-## Important security consideration: Indirect Prompt Injection Risk
+## Important Security Consideration: Indirect Prompt Injection
 
-When exposing any language model to untrusted data, there's a risk of an
-[indirect prompt injection attack](https://en.wikipedia.org/wiki/Prompt_injection).
-Agentic tools like Gemini CLI, connected to MCP servers, have access to a wide
-array of tools and APIs.
-
-This MCP server grants the agent the ability to read, modify, and delete your
-Google Account data, as well as other data shared with you.
+When exposing any language model to untrusted data, there is a risk of indirect prompt injection.  
+This MCP server can read/modify/delete data in your Google account and shared resources.
 
 - Never use this with untrusted tools
-- Never include untrusted inputs into the model context. This includes asking
-  Gemini CLI to process mail, documents, or other resources from unverified
-  sources.
-- Untrusted inputs may contain hidden instructions that could hijack your CLI
-  session. Attackers can then leverage this to modify, steal, or destroy your
-  data.
-- Always carefully review actions taken by Gemini CLI on your behalf to ensure
-  they are correct and align with your intentions.
+- Never include untrusted inputs into model context
+- Review all agent actions carefully before relying on results
 
 ## Contributing
 
-Contributions are welcome! Please read the [CONTRIBUTING.md](CONTRIBUTING.md)
-file for details on how to contribute to this project.
+Contributions are welcome. Please read [CONTRIBUTING.md](./CONTRIBUTING.md).
 
-## 📄 Legal
+## Legal
 
-- **License**: [Apache License 2.0](LICENSE)
-- **Terms of Service**: [Terms of Service](https://policies.google.com/terms)
-- **Privacy Policy**: [Privacy Policy](https://policies.google.com/privacy)
-- **Security**: [Security Policy](SECURITY.md)
+- License: [Apache License 2.0](./LICENSE)
+- Terms of Service: https://policies.google.com/terms
+- Privacy Policy: https://policies.google.com/privacy
+- Security Policy: [SECURITY.md](./SECURITY.md)
 
 ## Upstream
 
