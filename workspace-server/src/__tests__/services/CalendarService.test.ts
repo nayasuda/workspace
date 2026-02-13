@@ -162,7 +162,7 @@ describe('CalendarService', () => {
           start: eventInput.start,
           end: eventInput.end,
         },
-        sendUpdates: undefined,
+        sendUpdates: 'none',
       });
 
       expect(JSON.parse(result.content[0].text)).toEqual(mockCreatedEvent);
@@ -197,7 +197,7 @@ describe('CalendarService', () => {
           start: eventInput.start,
           end: eventInput.end,
         },
-        sendUpdates: undefined,
+        sendUpdates: 'none',
       });
 
       expect(JSON.parse(result.content[0].text)).toEqual(mockCreatedEvent);
@@ -235,7 +235,7 @@ describe('CalendarService', () => {
           start: eventInput.start,
           end: eventInput.end,
         },
-        sendUpdates: undefined,
+        sendUpdates: 'none',
       });
 
       expect(JSON.parse(result.content[0].text)).toEqual(mockCreatedEvent);
@@ -311,6 +311,41 @@ describe('CalendarService', () => {
           attendees: [{ email: 'test@example.com' }],
         },
         sendUpdates: 'all',
+      });
+
+      expect(JSON.parse(result.content[0].text)).toEqual(mockCreatedEvent);
+    });
+
+    it('should default sendUpdates to "none" when no attendees are present and sendUpdates is not provided', async () => {
+      const eventInput = {
+        calendarId: 'primary',
+        summary: 'Solo Working Session',
+        start: { dateTime: '2024-01-15T10:00:00-07:00' },
+        end: { dateTime: '2024-01-15T11:00:00-07:00' },
+      };
+
+      const mockCreatedEvent = {
+        id: 'event123',
+        summary: 'Solo Working Session',
+        start: eventInput.start,
+        end: eventInput.end,
+        status: 'confirmed',
+      };
+
+      mockCalendarAPI.events.insert.mockResolvedValue({
+        data: mockCreatedEvent,
+      });
+
+      const result = await calendarService.createEvent(eventInput);
+
+      expect(mockCalendarAPI.events.insert).toHaveBeenCalledWith({
+        calendarId: 'primary',
+        requestBody: {
+          summary: 'Solo Working Session',
+          start: eventInput.start,
+          end: eventInput.end,
+        },
+        sendUpdates: 'none',
       });
 
       expect(JSON.parse(result.content[0].text)).toEqual(mockCreatedEvent);

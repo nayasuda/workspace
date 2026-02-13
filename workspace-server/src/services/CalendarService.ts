@@ -191,8 +191,8 @@ export class CalendarService {
 
     // Determine sendUpdates value
     let finalSendUpdates = sendUpdates;
-    if (!finalSendUpdates && attendees && attendees.length > 0) {
-      finalSendUpdates = 'all';
+    if (finalSendUpdates === undefined) {
+      finalSendUpdates = attendees?.length ? 'all' : 'none';
     }
     if (finalSendUpdates) {
       logToFile(`Sending updates: ${finalSendUpdates}`);
